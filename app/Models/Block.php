@@ -8,27 +8,32 @@ use App\Services\Sort\SortModelTrait;
 use App\Services\Sort\SortStrategy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Template extends Model implements
-
+class Block extends Model implements
     SortStrategy,
     ChangeStatusStrategy
-
 {
     use HasFactory;
     use SortModelTrait;
     use ChangeStatusTrait;
 
     protected $fillable = [
-        'name',
-        'image',
         'sort',
+        'template_id',
+        'block_id',
+        'block_type',
         'is_show'
     ];
 
-    public function fields(): HasMany
+    public function template(): BelongsTo
     {
-        return $this->hasMany(Field::class)->orderBy('sort');
+        return $this->belongsTo(Template::class);
+    }
+
+    public function fieldContents(): HasMany
+    {
+      return $this->hasMany(FieldContent::class);
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests\Pages;
+namespace App\Http\Requests\Page;
 
-use App\Models\Page;
 use Illuminate\Validation\Rule;
 
 class UpdatePageRequest extends StorePageRequest
@@ -22,6 +21,7 @@ class UpdatePageRequest extends StorePageRequest
             Rule::unique('pages', 'path')
             ->ignore($this->page),
         ];
+        $rules['fieldContents'] = ['array'];
         return $rules;
     }
 }

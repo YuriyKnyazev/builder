@@ -1,11 +1,11 @@
-<div class="modal fade" id="modal-delete" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-delete-block" style="display: none;" aria-hidden="true">
     <div class="modal-dialog">
-        <form method="post" action="{{route('admin.'.str(class_basename($model))->camel()->plural().'.destroy',
-[str(class_basename($model))->camel()->toString()=>$model])}}" class="modal-content">
+        <form method="post" action="{{route('admin.blocks.destroy')}}" class="modal-content">
             @csrf
             @method('delete')
+            <input type="text" name="blockId" id="blockId">
             <div class="modal-header">
-                <h4 class="modal-title">Delete {{class_basename($model)}}</h4>
+                <h4 class="modal-title">Delete Block</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

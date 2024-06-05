@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Pages\StorePageRequest;
-use App\Http\Requests\Pages\UpdatePageRequest;
+use App\Http\Requests\Page\StorePageRequest;
+use App\Http\Requests\Page\UpdatePageRequest;
+use App\Models\FieldContent;
 use App\Models\Page;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -42,6 +44,17 @@ class PageController extends Controller
      */
     public function edit(Page $page): View
     {
+        $page->load('blocks.template.fields.fieldType', 'blocks.fieldContents');
+
+        $page->blocks->each(function ($block) use ($page) {
+            $block->template->fields->each(function ($field) use ($page, $block) {
+                $field->value = $block->fieldContents
+                    ->where('field_id', $field->id)->value('content');
+                $field->contentId = $block->fieldContents
+                    ->where('field_id', $field->id)->value('id');
+            });
+        });
+
         return view('admin.pages.edit', compact('page'));
     }
 
@@ -50,8 +63,15 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, Page $page): RedirectResponse
     {
-        $page = $page->update($request->validated());
-        return to_route('admin.pages.index');
+        DB::transaction(function () use ($page, $request) {
+            $page->update($request->validated());
+
+            foreach ($request->fieldContents as $id => $content) {
+                FieldContent::query()->where('id', $id)->update(['content' => $content]);
+            }
+        });
+
+        return to_route('admin.pages.edit', compact('page'));
     }
 
     /**
@@ -59,7 +79,7 @@ class PageController extends Controller
      */
     public function destroy(Page $page): RedirectResponse
     {
-        $page ->delete();
+        $page->delete();
         return to_route('admin.pages.index');
     }
 }

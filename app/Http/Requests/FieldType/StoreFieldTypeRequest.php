@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Pages;
+namespace App\Http\Requests\FieldType;
 
 use App\Http\Requests\Common\BaseRequest;
-use App\Models\Page;
+use Illuminate\Validation\Rule;
 
-class StorePageRequest extends BaseRequest
+class StoreFieldTypeRequest extends BaseRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -18,14 +18,9 @@ class StorePageRequest extends BaseRequest
             'name' => [
                 'required',
                 'string',
-                'max:250',
+                'max:100',
+                Rule::unique('field_types', 'name')
             ],
-            'path' => [
-                'required',
-                'string',
-                'max:250',
-                'unique:' . Page::class . ',path',
-            ]
         ];
     }
 }

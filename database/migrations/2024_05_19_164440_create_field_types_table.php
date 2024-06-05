@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('templates', function (Blueprint $table) {
+        Schema::create('field_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')
                 ->unique();
-            $table->string('image');
-            $table->tinyInteger('sort')
-                ->default(0);
-            $table->boolean('is_show')
-                ->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('templates');
+        Schema::dropIfExists('field_types');
     }
 };

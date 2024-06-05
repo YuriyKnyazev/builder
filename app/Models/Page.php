@@ -8,6 +8,7 @@ use App\Services\Sort\SortStrategy;
 use App\Services\Sort\SortModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property string name
@@ -32,4 +33,9 @@ class Page extends Model implements
         'sort',
         'is_show',
     ];
+    public function blocks(): MorphMany
+    {
+        return $this->morphMany(Block::class, 'block')
+            ->orderBy('sort');
+    }
 }

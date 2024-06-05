@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Requests\StoreTemplateRequest;
-use App\Http\Requests\UpdateTemplateRequest;
-use App\Models\Template;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreFieldContentRequest;
+use App\Http\Requests\UpdateFieldContentRequest;
+use App\Models\FieldContent;
 
-class TemplateController extends Controller
+class FieldContentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class TemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTemplateRequest $request)
+    public function store(StoreFieldContentRequest $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class TemplateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Template $template)
+    public function show(FieldContent $fieldContent)
     {
         //
     }
@@ -43,7 +44,7 @@ class TemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Template $template)
+    public function edit(FieldContent $fieldContent)
     {
         //
     }
@@ -51,7 +52,7 @@ class TemplateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTemplateRequest $request, Template $template)
+    public function update(UpdateFieldContentRequest $request, FieldContent $fieldContent)
     {
         //
     }
@@ -59,7 +60,7 @@ class TemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Template $template)
+    public function destroy(FieldContent $fieldContent)
     {
         //
     }

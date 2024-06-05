@@ -1,15 +1,17 @@
-<x-admin.layout title="Create Page">
-    <form action="{{route('admin.pages.store')}}"
+<x-admin.layout title="Create Field Type">
+    <form action="{{route('admin.fieldTypes.store')}}"
           method="post"
           class="col-md-6">
         @csrf
         <div class="card card-dark">
             <div class="card-header">
-                <h3 class="card-title">Create Page</h3>
+                <h3 class="card-title">Create Field Type</h3>
             </div>
             <div class="card-body">
-                <x-admin.fields.input label="Name" id="storeInputName" />
-                <x-admin.fields.input label="Path" id="storeInputPath" />
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" name="name" class="form-control">
+                </div>
             </div>
         </div>
         <div style="width: 100px">

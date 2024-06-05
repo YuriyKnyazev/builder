@@ -11,6 +11,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
     Route::put('status', [Admin\AdminController::class, 'changeStatus'])->name('status');
 
     Route::resource('pages', Admin\PageController::class);
+    Route::get('pages/{page}/add-block', [Admin\BlockController::class, 'create'])
+        ->name('pages.addBlock');
+    Route::post('pages/{page}/{template}/store', [Admin\BlockController::class, 'store'])
+        ->name('pages.storeBlock');
+    Route::delete('blocks', [Admin\BlockController::class, 'destroy'])->name('blocks.destroy');
+    Route::resource('fieldTypes', Admin\FieldTypeController::class);
+    Route::resource('templates', Admin\TemplateController::class);
 });
 
 require __DIR__ . '/auth.php';
