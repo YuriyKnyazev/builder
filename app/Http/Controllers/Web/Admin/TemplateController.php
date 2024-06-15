@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Enums\TemplateTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Template\StoreTemplateRequest;
 use App\Http\Requests\Template\UpdateTemplateRequest;
-use App\Models\Field;
 use App\Models\FieldType;
 use App\Models\Template;
 use App\Services\FieldService;
@@ -27,7 +27,12 @@ class TemplateController extends Controller
     public function index()
     {
         $templates = Template::query()->orderBy('sort')->get();
-        return view('admin.templates.index', compact('templates'));
+        $types = [
+            TemplateTypeEnum::Page->name => $templates->where('template_type', TemplateTypeEnum::Page->value),
+            TemplateTypeEnum::Menu->name => $templates->where('template_type', TemplateTypeEnum::Menu->value)
+        ];
+
+        return view('admin.templates.index', compact('types'));
     }
 
     /**
@@ -41,18 +46,20 @@ class TemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTemplateRequest $request)
+    public function store(StoreTemplateRequest $request): RedirectResponse
     {
         $fields = $request->validated();
+
+        $fields['sort'] = Template::query()->count();
 
         if ($image = $request->file('image')) {
             $filename = rand(111111, 999999) . '.' . $image->getClientOriginalExtension();
             Storage::putFileAs('templates', $image, $filename);
             $fields['image'] = 'storage/templates/' . $filename;
         }
-        Template::query()->create($fields);
+        $template = Template::query()->create($fields);
 
-        return to_route('admin.templates.index');
+        return to_route('admin.templates.edit', compact('template'));
     }
 
     /**
@@ -90,8 +97,9 @@ class TemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Template $template)
+    public function destroy(Template $template): RedirectResponse
     {
-        //
+        $template->delete();
+        return to_route('admin.templates.index');
     }
 }

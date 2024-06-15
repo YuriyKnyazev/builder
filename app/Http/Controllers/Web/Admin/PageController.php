@@ -7,12 +7,19 @@ use App\Http\Requests\Page\StorePageRequest;
 use App\Http\Requests\Page\UpdatePageRequest;
 use App\Models\FieldContent;
 use App\Models\Page;
+use App\Services\BlockService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 
 class PageController extends Controller
 {
+    public function __construct(
+        private BlockService $blockService
+    ){
+    }
     /**
      * Display a listing of the resource.
      */
@@ -46,14 +53,7 @@ class PageController extends Controller
     {
         $page->load('blocks.template.fields.fieldType', 'blocks.fieldContents');
 
-        $page->blocks->each(function ($block) use ($page) {
-            $block->template->fields->each(function ($field) use ($page, $block) {
-                $field->value = $block->fieldContents
-                    ->where('field_id', $field->id)->value('content');
-                $field->contentId = $block->fieldContents
-                    ->where('field_id', $field->id)->value('id');
-            });
-        });
+        $this->blockService->parseData($page);
 
         return view('admin.pages.edit', compact('page'));
     }
@@ -63,10 +63,20 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, Page $page): RedirectResponse
     {
-        DB::transaction(function () use ($page, $request) {
+        $fieldData = $request->fieldContents;
+
+        if ($files = $request->file('fieldContents')) {
+            foreach ($files as $id => $file) {
+                $fileName = rand(111111, 999999). '.' . $file->getClientOriginalExtension();
+                Storage::putFileAs('pages/' . $page->getKey(), $file, $fileName);
+                $fieldData[$id] = 'storage/pages/' . $page->getKey() . '/' . $fileName;
+            }
+        }
+
+        DB::transaction(function () use ($page, $fieldData, $request) {
             $page->update($request->validated());
 
-            foreach ($request->fieldContents as $id => $content) {
+            foreach ($fieldData as $id => $content) {
                 FieldContent::query()->where('id', $id)->update(['content' => $content]);
             }
         });

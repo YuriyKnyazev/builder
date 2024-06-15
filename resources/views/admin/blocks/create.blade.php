@@ -3,7 +3,7 @@
         @foreach($templates as $template)
             <div class="col-md-4">
                 <form action="{{route('admin.pages.storeBlock', compact(['page', 'template']))}}"
-                      class="card card-dark zoom" style="cursor: pointer"
+                      class="card card-dark zoom my-2" style="cursor: pointer"
                 onclick="this.submit()" method="post">
                     @csrf
                     <div class="card-header">

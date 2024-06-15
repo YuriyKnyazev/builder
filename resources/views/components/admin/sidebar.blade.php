@@ -13,6 +13,13 @@
                 data-accordion="false">
                 <li class="nav-header">SITE</li>
                 <li class="nav-item">
+                    <a href="{{route('admin.menus.index')}}"
+                       class="nav-link @if(request()->routeIs('admin.menus.index')) active @endif">
+                        <i class="fas fa-list-alt nav-icon"></i>
+                        <p>Menus</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.pages.index')}}"
                        class="nav-link @if(request()->routeIs('admin.pages.index')) active @endif">
                         <i class="fas fa-list nav-icon"></i>

@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Block;
 use App\Models\Field;
+use App\Models\FieldContent;
 use App\Models\Template;
 
 class FieldService
@@ -32,5 +34,18 @@ class FieldService
             ->delete();
         Field::query()->upsert($updateFields, ['id'], ['label', 'name', 'sort', 'field_type_id']);
         Field::query()->insert($createFields);
+    }
+
+    public function storeFields(Template $template, Block $block): void
+    {
+        $fields = $template->fields()->get();
+
+        $fieldsContentArray = [];
+        foreach ($fields as $field) {
+            $fieldsContentArray[$field->id]['field_id'] = $field->getKey();
+            $fieldsContentArray[$field->id]['block_id'] = $block->getKey();
+        }
+
+        FieldContent::query()->insert($fieldsContentArray);
     }
 }

@@ -24,7 +24,8 @@ class Template extends Model implements
         'name',
         'image',
         'sort',
-        'is_show'
+        'is_show',
+        'template_type'
     ];
 
     public function fields(): HasMany

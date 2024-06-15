@@ -1,7 +1,7 @@
 <x-admin.layout title="Edit Page">
     <form action="{{route('admin.pages.update', compact('page'))}}"
           method="post"
-          class="col-md-6">
+          enctype="multipart/form-data">
         @csrf
         @method('put')
         <div class="col-md-6">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="card-body" id="sortable">
                     @foreach($page->blocks as $block)
-                      <x-admin.blocks.card :$block />
+                      <x-admin.blocks.card :$block sort/>
                     @endforeach
 
                 </div>
@@ -37,7 +37,7 @@
 </x-admin.layout>
 
 <x-admin.modals.delete :model="$page"/>
-<x-admin.modals.delete-block :model="$page"/>
+<x-admin.modals.delete-block />
 @isset($block)
 <script>
     $(function () {
@@ -61,19 +61,5 @@
             }
         });
     });
-
-    function changeStatus(id, model) {
-        fetch('{{route('admin.status')}}', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-                'X-CSRF-Token': '{{csrf_token()}}'
-            },
-            body: JSON.stringify({
-                id,
-                model
-            })
-        });
-    }
 </script>
 @endisset

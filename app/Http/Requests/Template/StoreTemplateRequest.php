@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Template;
 
+use App\Enums\TemplateTypeEnum;
 use App\Http\Requests\Common\BaseRequest;
 use App\Models\Template;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreTemplateRequest extends BaseRequest
 {
@@ -15,6 +17,11 @@ class StoreTemplateRequest extends BaseRequest
     public function rules(): array
     {
         return [
+            'template_type' => [
+                'required',
+                'int',
+                new Enum(TemplateTypeEnum::class)
+            ],
             'name' => [
                 'required',
                 'string',

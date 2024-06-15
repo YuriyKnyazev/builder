@@ -3,11 +3,13 @@
         <h3 class="card-title">{{$block->template->name}}</h3>
         <div class="card-tools d-flex">
             <x-admin.buttons.off :model="$block"/>
+            @isset($sort)
             <div class="d-flex handle"
                  style="cursor: move; padding: 3px">
                 <i class="fas fa-ellipsis-v"></i>
                 <i class="fas fa-ellipsis-v" style="margin-left: 3px"></i>
             </div>
+            @endisset
             <button type="button" class="btn btn-tool"
                     data-toggle="modal"
                     data-target="#modal-delete-block"

@@ -1,3 +1,4 @@
+@php use App\Enums\TemplateTypeEnum; @endphp
 <x-admin.layout title="Create Template">
     <form action="{{route('admin.templates.store')}}"
           method="post"
@@ -10,17 +11,15 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label for="">Name</label>
-                    <input type="text" name="name" class="form-control">
+                    <label for="">Type</label>
+                    <select id="" class="form-control" name="template_type">
+                    @foreach(TemplateTypeEnum::cases() as $type)
+                        <option value="{{$type->value}}">{{$type->name}}</option>
+                    @endforeach
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label for="customFile">Image</label>
-
-                    <div class="custom-file">
-                        <input type="file" name="image" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-                </div>
+                <x-admin.fields.input label="Name" id="templName"/>
+                <x-admin.fields.image label="Image" id="templImage"/>
             </div>
         </div>
         <div style="width: 100px">
