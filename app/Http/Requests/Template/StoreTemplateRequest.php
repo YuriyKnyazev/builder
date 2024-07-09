@@ -31,6 +31,12 @@ class StoreTemplateRequest extends BaseRequest
             'image' => [
                 'required',
                 'file'
+            ],
+            'level' => [
+                'required',
+                'int',
+                'min:1',
+                'max:3',
             ]
         ];
     }

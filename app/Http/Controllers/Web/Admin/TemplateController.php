@@ -26,7 +26,7 @@ class TemplateController extends Controller
      */
     public function index()
     {
-        $templates = Template::query()->orderBy('sort')->get();
+        $templates = Template::query()->whereNull('template_id')->orderBy('sort')->get();
         $types = [
             TemplateTypeEnum::Page->name => $templates->where('template_type', TemplateTypeEnum::Page->value),
             TemplateTypeEnum::Menu->name => $templates->where('template_type', TemplateTypeEnum::Menu->value)
@@ -59,6 +59,16 @@ class TemplateController extends Controller
         }
         $template = Template::query()->create($fields);
 
+        if ((int)$request->level === 2 || (int)$request->level === 3) {
+            $secondTemplate = Template::query()->create([
+                'template_id' => $template->getKey()
+            ]);
+        }
+        if ((int)$request->level === 3) {
+            Template::query()->create([
+                'template_id' => $secondTemplate->getKey()
+            ]);
+        }
         return to_route('admin.templates.edit', compact('template'));
     }
 
@@ -76,7 +86,7 @@ class TemplateController extends Controller
     public function edit(Template $template)
     {
         $fieldTypes = FieldType::all();
-        $template->load('fields.fieldType');
+        $template->load('fields.fieldType', 'template.template');
 
         return view('admin.templates.edit', compact(['template', 'fieldTypes']));
     }
@@ -88,7 +98,7 @@ class TemplateController extends Controller
     {
         DB::transaction(function () use ($request, $template) {
             $template->update(['name' => $request->name]);
-            $this->fieldService->update($request->fields ?? [], $template);
+            $this->fieldService->update($request->fields ?? [], $request->templateIds ?? []);
         });
 
         return to_route('admin.templates.edit', compact('template'));

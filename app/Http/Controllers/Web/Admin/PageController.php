@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Page\StorePageRequest;
 use App\Http\Requests\Page\UpdatePageRequest;
 use App\Models\FieldContent;
+use App\Models\Language;
 use App\Models\Page;
 use App\Services\BlockService;
 use Illuminate\Contracts\View\View;
@@ -51,11 +52,18 @@ class PageController extends Controller
      */
     public function edit(Page $page): View
     {
-        $page->load('blocks.template.fields.fieldType', 'blocks.fieldContents');
+        $languages = Language::query()->orderBy('sort')->get();
 
-        $this->blockService->parseData($page);
+        $page->load(
+            'blocks.template.fields.fieldType',
+            'blocks.fieldContents',
+            'blocks.template.template',
+            'blocks.blocks.blocks'
+        );
 
-        return view('admin.pages.edit', compact('page'));
+        $blocks = $this->blockService->parseData($page);
+
+        return view('admin.pages.edit', compact('page', 'languages', 'blocks'));
     }
 
     /**

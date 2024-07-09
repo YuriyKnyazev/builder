@@ -1,4 +1,4 @@
-<x-frontend.layout :$menus>
+<x-frontend.layout :$menus :$languages>
 
     @foreach($blocks as $block)
         <x-dynamic-component

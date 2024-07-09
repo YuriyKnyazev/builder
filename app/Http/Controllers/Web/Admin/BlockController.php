@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Enums\TemplateTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Block\BlockIdRequest;
+use App\Http\Requests\Block\BulkStoreBlockRequest;
 use App\Http\Requests\UpdateBlockRequest;
 use App\Models\Block;
-use App\Models\FieldContent;
 use App\Models\Menu;
 use App\Models\Page;
 use App\Models\Template;
@@ -68,6 +68,28 @@ class BlockController extends Controller
         $this->fieldService->storeFields($template, $block);
 
         return to_route('admin.pages.edit', compact('page'));
+    }
+
+    public function bulkStore(BulkStoreBlockRequest $request)
+    {
+        $blocks = [];
+        /* @var Template $template */
+        $template = Template::query()->find($request->templateId);
+
+        for ($i = 0; $i < $request->number; $i++) {
+            $blocks[] = [
+                'template_id' => $request->templateId,
+                'block_id' => $request->blockId,
+                'block_type' => 'App\Models\Block',
+                'sort' => $i,
+                'is_show' => 1
+            ];
+        }
+        foreach ($blocks as $block) {
+            $block = Block::create($block);
+            $this->fieldService->storeFields($template, $block);
+        }
+        return back();
     }
 
     public function storeMenu(Menu $menu, Template $template)

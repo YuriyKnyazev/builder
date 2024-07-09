@@ -5,19 +5,19 @@ namespace App\Services;
 use App\Models\Block;
 use App\Models\Field;
 use App\Models\FieldContent;
+use App\Models\Language;
 use App\Models\Template;
 
 class FieldService
 {
 
-    public function update(array $fields, Template $template): void
+    public function update(array $fields, array $templateIds): void
     {
         $i = 0;
         $createFields = [];
         $updateFields = [];
         foreach ($fields as &$field) {
             $field['sort'] = $i;
-            $field['template_id'] = $template->getKey();
             $i++;
             if (isset($field['id'])) {
                 $updateFields[] = $field;
@@ -30,20 +30,29 @@ class FieldService
 
         Field::query()
             ->whereNotIn('id', $fieldIds)
-            ->where('template_id', $template->getKey())
+            ->whereIn('template_id', $templateIds)
             ->delete();
+
         Field::query()->upsert($updateFields, ['id'], ['label', 'name', 'sort', 'field_type_id']);
         Field::query()->insert($createFields);
     }
 
     public function storeFields(Template $template, Block $block): void
     {
+        $languages = Language::all();
+
         $fields = $template->fields()->get();
 
         $fieldsContentArray = [];
-        foreach ($fields as $field) {
-            $fieldsContentArray[$field->id]['field_id'] = $field->getKey();
-            $fieldsContentArray[$field->id]['block_id'] = $block->getKey();
+
+        $i = 0;
+        foreach ($languages as $language) {
+            foreach ($fields as $field) {
+                $fieldsContentArray[$i]['field_id'] = $field->getKey();
+                $fieldsContentArray[$i]['block_id'] = $block->getKey();
+                $fieldsContentArray[$i]['language_id'] = $language->getKey();
+                $i++;
+            }
         }
 
         FieldContent::query()->insert($fieldsContentArray);

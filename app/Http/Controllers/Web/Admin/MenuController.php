@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Menu\StoreMenuRequest;
 use App\Http\Requests\Menu\UpdateMenuRequest;
 use App\Models\FieldContent;
+use App\Models\Language;
 use App\Models\Menu;
 use App\Services\BlockService;
 use Illuminate\Support\Facades\DB;
@@ -53,13 +54,17 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
+        $languages = Language::query()->orderBy('sort')->get();
+
         $menu->load('block.template.fields.fieldType', 'block.fieldContents');
 
+        $parsedBlock = [];
+
         if ($menu->block) {
-            $this->blockService->parseSingleData($menu);
+            $parsedBlock = $this->blockService->parseSingleData($menu);
         }
 
-        return view('admin.menus.edit', compact('menu'));
+        return view('admin.menus.edit', compact('menu', 'parsedBlock', 'languages'));
     }
 
     /**
@@ -67,8 +72,6 @@ class MenuController extends Controller
      */
     public function update(UpdateMenuRequest $request, Menu $menu)
     {
-
-
         $fieldData = $request->fieldContents;
 
         DB::transaction(function () use ($menu, $fieldData, $request) {
@@ -86,6 +89,7 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        //
+        $menu->delete();
+        return to_route('admin.menus.index');
     }
 }

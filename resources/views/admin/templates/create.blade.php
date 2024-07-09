@@ -18,6 +18,14 @@
                     @endforeach
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="">Levels</label>
+                    <select id="" class="form-control" name="level">
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
                 <x-admin.fields.input label="Name" id="templName"/>
                 <x-admin.fields.image label="Image" id="templImage"/>
             </div>

@@ -4,8 +4,9 @@ namespace App\Http\Requests\Block;
 
 use App\Http\Requests\Common\BaseRequest;
 use App\Models\Block;
+use App\Models\Template;
 
-class BlockIdRequest extends BaseRequest
+class BulkStoreBlockRequest extends BaseRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,6 +20,16 @@ class BlockIdRequest extends BaseRequest
                 'required',
                 'int',
                 'exists:' . Block::class . ',id'
+            ],
+            'templateId' => [
+                'required',
+                'int',
+                'exists:' . Template::class . ',id'
+            ],
+            'number' => [
+                'required',
+                'int',
+                'min:1'
             ],
         ];
     }

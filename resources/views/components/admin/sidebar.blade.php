@@ -11,6 +11,14 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-header">GENERAL</li>
+                <li class="nav-item">
+                    <a href="{{route('admin.languages.index')}}"
+                       class="nav-link @if(request()->routeIs('admin.languages.index')) active @endif">
+                        <i class="fas fa-language nav-icon"></i>
+                        <p>Languages</p>
+                    </a>
+                </li>
                 <li class="nav-header">SITE</li>
                 <li class="nav-item">
                     <a href="{{route('admin.menus.index')}}"

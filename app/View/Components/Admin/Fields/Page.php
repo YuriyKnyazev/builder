@@ -16,8 +16,8 @@ class Page extends Component
     public function __construct(
         public string $label,
         public string $name,
-        public string $value,
-        public string $id
+        public string $id,
+        public string|null $value = null,
     )
     {
         $this->pages = \App\Models\Page::query()

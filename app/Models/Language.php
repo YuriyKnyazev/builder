@@ -8,10 +8,8 @@ use App\Services\Sort\SortModelTrait;
 use App\Services\Sort\SortStrategy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Template extends Model implements
+class Language extends Model implements
 
     SortStrategy,
     ChangeStatusStrategy
@@ -23,22 +21,8 @@ class Template extends Model implements
 
     protected $fillable = [
         'name',
-        'image',
+        'code',
         'sort',
         'is_show',
-        'template_type',
-        'template_id'
     ];
-
-    public function fields(): HasMany
-    {
-        return $this->hasMany(Field::class)->orderBy('sort');
-    }
-
-    public function template(): HasOne
-    {
-        return $this->hasOne(Template::class)
-            ->with('fields.fieldType');
-    }
 }
-

@@ -44,47 +44,19 @@
             <div class="header-menu-wrapper">
                 <!-- Menu -->
                 <ul class="header-menu">
+                    <form action="{{route('locale')}}" id="locale" class="d-inline">
+                        <select name="lang" id="" onchange="document.querySelector('#locale').submit()">
+                            @foreach($languages as $language)
+                                <option @selected(app()->getLocale() === $language->code) value="{{$language->id}}">{{$language->name}}</option>
+                            @endforeach
+                        </select>
+                    </form>
                     @foreach($menus as $menu)
                         <x-dynamic-component
                             component="{{'frontend.menus.' . $menu['template']}}"
                             :$menu
                         />
                     @endforeach
-
-{{--                    <li class="m-item">--}}
-{{--                        <a class="m-link" href="#">Dropdown</a>--}}
-{{--                        <ul class="m-dropdown">--}}
-{{--                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="#">Dropdown Item</a></li>--}}
-{{--                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="#">Dropdown Item</a></li>--}}
-{{--                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="#">Dropdown Item</a></li>--}}
-{{--                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="#">Dropdown Item</a></li>--}}
-{{--                        </ul>--}}
-{{--                    </li>--}}
-{{--                    <li class="m-item">--}}
-{{--                        <a class="m-link" href="#">Subdropdown</a>--}}
-{{--                        <ul class="m-dropdown">--}}
-{{--                            <li class="m-dropdown-item">--}}
-{{--                                <a class="m-dropdown-link" href="#">Dropdown Item</a>--}}
-{{--                                <ul class="m-subdropdown">--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            <li class="m-dropdown-item">--}}
-{{--                                <a class="m-dropdown-link" href="#">Dropdown Item</a>--}}
-{{--                                <ul class="m-subdropdown">--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                    <li class="m-subdropdown-item"><a class="m-subdropdown-link" href="#">Subdropdown Item</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="#">Dropdown Item</a></li>--}}
-{{--                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="#">Dropdown Item</a></li>--}}
-{{--                        </ul>--}}
-{{--                    </li>--}}
                 </ul>
                 <!-- Extra -->
                 <div class="header-menu-extra">
@@ -141,9 +113,12 @@
                 <div class="col-6 col-lg-3 text-lg-right">
                     <p class="font-lg-small">121 King St, Melbourne VIC 3000<br>contact@example.com</p>
                     <ul class="list-inline-sm margin-top-10 margin-lg-top-20">
-                        <li><a class="button-circle button-circle-xs button-circle-white" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a class="button-circle button-circle-xs button-circle-white" href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a class="button-circle button-circle-xs button-circle-white" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li><a class="button-circle button-circle-xs button-circle-white" href="#"><i
+                                    class="fab fa-facebook-f"></i></a></li>
+                        <li><a class="button-circle button-circle-xs button-circle-white" href="#"><i
+                                    class="fab fa-twitter"></i></a></li>
+                        <li><a class="button-circle button-circle-xs button-circle-white" href="#"><i
+                                    class="fab fa-linkedin-in"></i></a></li>
                     </ul>
                 </div>
             </div><!-- end row -->
