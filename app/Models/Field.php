@@ -14,4 +14,9 @@ class Field extends Model
     {
         return $this->belongsTo(FieldType::class);
     }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(Template::class);
+    }
 }

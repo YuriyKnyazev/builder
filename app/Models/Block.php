@@ -11,6 +11,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
+
+/**
+ * @property int sort
+ * @property boolean is_show
+ * @property int template_id
+ * @property int block_id
+ * @property string block_type
+ *
+ * @property Collection|Block[] blocks
+ * @property Template $template
+ */
 
 class Block extends Model implements
     SortStrategy,

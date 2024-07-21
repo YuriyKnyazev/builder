@@ -6,11 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Languages\StoreLanguageRequest;
 use App\Http\Requests\Languages\UpdateLanguageRequest;
 use App\Models\Language;
+use App\Services\LanguageService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class LanguageController extends Controller
 {
+    public function __construct(
+        private readonly LanguageService $service
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,7 +33,7 @@ class LanguageController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.languages.create');
     }
@@ -36,7 +43,9 @@ class LanguageController extends Controller
      */
     public function store(StoreLanguageRequest $request): RedirectResponse
     {
-        Language::query()->create($request->validated());
+        $language = $this->service->create($request->validated());
+        $this->service->insertFieldContents($language);
+
         return to_route('admin.languages.index');
     }
 
@@ -51,7 +60,7 @@ class LanguageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLanguageRequest $request, Language $language)
+    public function update(UpdateLanguageRequest $request, Language $language): RedirectResponse
     {
         $language->update($request->validated());
         return to_route('admin.languages.index');
@@ -60,7 +69,7 @@ class LanguageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Language $language)
+    public function destroy(Language $language): RedirectResponse
     {
         $language -> delete();
         return to_route('admin.languages.index');

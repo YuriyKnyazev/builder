@@ -9,12 +9,14 @@ use App\Models\FieldContent;
 use App\Models\Language;
 use App\Models\Menu;
 use App\Services\BlockService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
     public function __construct(
-        private BlockService $blockService
+        private readonly BlockService $blockService
     )
     {
     }
@@ -22,7 +24,7 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $menus = Menu::query()
             ->orderBy('sort')
@@ -33,7 +35,7 @@ class MenuController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.menus.create');
     }
@@ -41,7 +43,7 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMenuRequest $request)
+    public function store(StoreMenuRequest $request): RedirectResponse
     {
         $fields = $request->validated();
         $fields['sort'] = Menu::query()->count();
@@ -52,7 +54,7 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Menu $menu)
+    public function edit(Menu $menu): View
     {
         $languages = Language::query()->orderBy('sort')->get();
 
@@ -70,7 +72,7 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMenuRequest $request, Menu $menu)
+    public function update(UpdateMenuRequest $request, Menu $menu): RedirectResponse
     {
         $fieldData = $request->fieldContents;
 
@@ -87,7 +89,7 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Menu $menu)
+    public function destroy(Menu $menu): RedirectResponse
     {
         $menu->delete();
         return to_route('admin.menus.index');

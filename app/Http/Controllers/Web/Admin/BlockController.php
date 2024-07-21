@@ -6,33 +6,26 @@ use App\Enums\TemplateTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Block\BlockIdRequest;
 use App\Http\Requests\Block\BulkStoreBlockRequest;
-use App\Http\Requests\UpdateBlockRequest;
 use App\Models\Block;
 use App\Models\Menu;
 use App\Models\Page;
 use App\Models\Template;
 use App\Services\FieldService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class BlockController extends Controller
 {
     public function __construct(
-        private FieldService $fieldService
+        private readonly FieldService $fieldService
     )
     {
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
-    public function createPageBlock(Page $page)
+    public function createPageBlock(Page $page): View
     {
         $templates = Template::query()
             ->where('template_type', TemplateTypeEnum::Page->value)
@@ -42,7 +35,7 @@ class BlockController extends Controller
         return view('admin.blocks.create', compact(['templates', 'page']));
     }
 
-    public function createMenuBlock(Menu $menu)
+    public function createMenuBlock(Menu $menu): View
     {
         $templates = Template::query()
             ->where('template_type', TemplateTypeEnum::Menu->value)
@@ -55,7 +48,7 @@ class BlockController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Page $page, Template $template)
+    public function store(Page $page, Template $template): RedirectResponse
     {
         $blockCount = $page->blocks()->count();
 
@@ -70,7 +63,7 @@ class BlockController extends Controller
         return to_route('admin.pages.edit', compact('page'));
     }
 
-    public function bulkStore(BulkStoreBlockRequest $request)
+    public function bulkStore(BulkStoreBlockRequest $request): RedirectResponse
     {
         $blocks = [];
         /* @var Template $template */
@@ -92,7 +85,7 @@ class BlockController extends Controller
         return back();
     }
 
-    public function storeMenu(Menu $menu, Template $template)
+    public function storeMenu(Menu $menu, Template $template): RedirectResponse
     {
         $blockCount = $menu->block()->count();
 
@@ -108,33 +101,9 @@ class BlockController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Block $block)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Block $block)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateBlockRequest $request, Block $block)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BlockIdRequest $request)
+    public function destroy(BlockIdRequest $request): RedirectResponse
     {
         Block::query()->where('id', $request->blockId)->delete();
         return back();

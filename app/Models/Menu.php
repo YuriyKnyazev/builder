@@ -10,6 +10,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
+/**
+ * @property string name
+ * @property int sort
+ * @property boolean is_show
+ *
+ * @property Block block
+ *
+ */
 class Menu extends Model implements
     SortStrategy,
     ChangeStatusStrategy

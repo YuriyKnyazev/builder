@@ -9,6 +9,7 @@ use App\Services\Sort\SortModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property string name
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int sort
  * @property boolean is_show
  *
+ * @property Collection|Block[] blocks
  */
 class Page extends Model implements
     SortStrategy,

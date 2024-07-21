@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 class PageController extends Controller
 {
     public function __construct(
-        private BlockService $blockService
+        private readonly BlockService $blockService
     ){
     }
     /**

@@ -49,6 +49,14 @@
                         <p>Templates</p>
                     </a>
                 </li>
+                <li class="nav-header">SYSTEM</li>
+                <li class="nav-item">
+                    <a href="{{route('admin.history.index')}}"
+                       class="nav-link @if(request()->routeIs('admin.history.index')) active @endif">
+                        <i class="fas fa-clock nav-icon"></i>
+                        <p>History</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

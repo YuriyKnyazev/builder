@@ -35,6 +35,29 @@ class FieldService
 
         Field::query()->upsert($updateFields, ['id'], ['label', 'name', 'sort', 'field_type_id']);
         Field::query()->insert($createFields);
+
+        $newFields = Field::query()
+            ->with('template.blocks')
+            ->latest('id')
+            ->limit(count($createFields))
+            ->get();
+
+        $insertData = [];
+        $languages = Language::all();
+
+        foreach ($newFields as $newField) {
+            foreach ($newField->template->blocks as $block) {
+                foreach ($languages as $language) {
+                    $insertData[] = [
+                        'block_id' => $block->id,
+                        'field_id' => $newField->id,
+                        'language_id' => $language->id
+                    ];
+                }
+            }
+        }
+
+        FieldContent::query()->insert($insertData);
     }
 
     public function storeFields(Template $template, Block $block): void

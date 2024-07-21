@@ -25,6 +25,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
     Route::resource('fieldTypes', Admin\FieldTypeController::class);
     Route::resource('templates', Admin\TemplateController::class);
     Route::resource('languages', Admin\LanguageController::class);
+    Route::get('history', [Admin\EventController::class, 'index'])->name('history.index');
+    Route::delete('history/deleteByDay', [Admin\EventController::class, 'deleteByDay'])
+        ->name('events.deleteByDay');
+
     Route::resource('menus', Admin\MenuController::class);
     Route::get('menus/{menu}/add-block', [Admin\BlockController::class, 'createMenuBlock'])
         ->name('menus.addBlock');

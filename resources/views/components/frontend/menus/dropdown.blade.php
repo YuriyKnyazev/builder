@@ -2,7 +2,7 @@
                         <a class="m-link" href="#">{{$menu['label']}}</a>
                         <ul class="m-dropdown">
                             @foreach($menu['blocks'] as $block)
-                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="{{$block['link']}}">{{$block['label']}}</a></li>
+                            <li class="m-dropdown-item"><a class="m-dropdown-link" href="{{$block['link'] ?? ''}}">{{$block['label']}}</a></li>
                             @endforeach
                         </ul>
                     </li>

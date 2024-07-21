@@ -9,6 +9,7 @@ use App\Http\Requests\Template\UpdateTemplateRequest;
 use App\Models\FieldType;
 use App\Models\Template;
 use App\Services\FieldService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 class TemplateController extends Controller
 {
     public function __construct(
-        private FieldService $fieldService
+        private readonly FieldService $fieldService
     )
     {
     }
@@ -24,7 +25,7 @@ class TemplateController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $templates = Template::query()->whereNull('template_id')->orderBy('sort')->get();
         $types = [
@@ -38,7 +39,7 @@ class TemplateController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.templates.create');
     }
@@ -73,17 +74,9 @@ class TemplateController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Template $template)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Template $template)
+    public function edit(Template $template): View
     {
         $fieldTypes = FieldType::all();
         $template->load('fields.fieldType', 'template.template');
